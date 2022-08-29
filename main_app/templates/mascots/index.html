@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Mascot List</h1>
+
+{% for mascot in mascots %}
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">{{ mascot.name }}</span>
+      <p>Product: {{ mascot.product }}</p>
+      <p>Description: {{ mascot.description }}</p>
+      <p>Age: {{ mascot.age }}</p>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}
