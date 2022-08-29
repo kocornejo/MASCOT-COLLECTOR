@@ -10,6 +10,10 @@
     <p>Description: {{ mascot.description }}</p>
     <p>Age: {{ mascot.age }}</p>
   </div>
+  <div class="card-action">
+    <a href="{% url 'mascots_update' mascot.id %}">Edit</a>
+    <a href="{% url 'mascots_delete' mascot.id %}">Delete</a>
+  </div>
 </div>
 
 {% endblock %}

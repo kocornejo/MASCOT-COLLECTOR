@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Mascot
 
 # Add the following import
@@ -27,7 +28,7 @@ from .models import Mascot
 
 # Define the home view
 def home(request):
-  return HttpResponse('<h1>Hello /ᐠ｡‸｡ᐟ\ﾉ</h1>')
+  return HttpResponse('<marquee  behavior="scroll" direction="left"><img src="/static/css/imgs/tony.jpg" alt="tony the tiger"></marquee>')
 
 def about(request):
   return render(request, 'about.html')
@@ -39,3 +40,15 @@ def mascots_index(request):
 def mascots_detail(request, mascot_id):
   mascot = Mascot.objects.get(id=mascot_id)
   return render(request, 'mascots/detail.html', { 'mascot': mascot })
+
+class MascotCreate(CreateView):
+    model = Mascot
+    fields = '__all__'
+
+class MascotUpdate(UpdateView):
+  model = Mascot
+  fields = ['product', 'description', 'age']
+
+class MascotDelete(DeleteView):
+  model = Mascot
+  success_url = '/mascots/'
