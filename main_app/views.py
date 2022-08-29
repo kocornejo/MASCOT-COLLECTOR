@@ -1,8 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from .models import Mascot
 
 # Add the following import
-from django.http import HttpResponse
 
 
 
@@ -33,4 +33,9 @@ def about(request):
   return render(request, 'about.html')
 
 def mascots_index(request):
+  mascots = Mascot.objects.all()  
   return render(request, 'mascots/index.html', { 'mascots': mascots })
+
+def mascots_detail(request, mascot_id):
+  mascot = Mascot.objects.get(id=mascot_id)
+  return render(request, 'mascots/detail.html', { 'mascot': mascot })
