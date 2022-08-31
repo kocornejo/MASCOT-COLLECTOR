@@ -1,26 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Mascot
+from .forms import FeedingForm
 
-# Add the following import
-
-
-
-# class Mascot:
-#     def __init__(self, name, product, description, age):
-#         self.name = name
-#         self.product = product
-#         self.description = description
-#         self.age = age
-
-# mascots = [
-#     Mascot('Tony the Tiger', 'cereal', 'tiger', 61),
-#     Mascot('The Energizer Bunny', 'batteries', 'bunny', 34),
-#     Mascot('The Noid', 'pizza', 'humanoid with rabbit ears', 36),
-#     Mascot('Toomgis', 'convenience store chain', 'humanoid comprised of snacks', 6),
-#     Mascot('Little Lad', 'candy', 'british guy', 15)
-# ]
 
 
 
@@ -39,7 +22,18 @@ def mascots_index(request):
 
 def mascots_detail(request, mascot_id):
   mascot = Mascot.objects.get(id=mascot_id)
-  return render(request, 'mascots/detail.html', { 'mascot': mascot })
+  feeding_form = FeedingForm()
+  return render(request, 'mascots/detail.html', {
+    'mascot': mascot, 'feeding_form': feeding_form
+  })
+
+def add_feeding(request, mascot_id):
+  form = FeedingForm(request.POST)
+  if form.is_valid():
+    new_feeding = form.save(commit=False)
+    new_feeding.mascot_id = mascot_id
+    new_feeding.save()
+  return redirect('detail', mascot_id=mascot_id)
 
 class MascotCreate(CreateView):
     model = Mascot

@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-# Register your models here.
-from .models import Mascot
+from .models import Mascot, Feeding
 
 admin.site.register(Mascot)
+admin.site.register(Feeding)
