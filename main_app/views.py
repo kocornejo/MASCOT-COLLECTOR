@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Mascot
+from .models import Mascot, Product
 from .forms import FeedingForm
-
-
-
-
+from django.views.generic import ListView, DetailView
 
 
 # Define the home view
@@ -22,10 +19,15 @@ def mascots_index(request):
 
 def mascots_detail(request, mascot_id):
   mascot = Mascot.objects.get(id=mascot_id)
+  products_mascot_doesnt_endorse = Product.objects.exclude(id__in = mascot.products.all().values_list('id'))
   feeding_form = FeedingForm()
-  return render(request, 'mascots/detail.html', {
-    'mascot': mascot, 'feeding_form': feeding_form
-  })
+  return render(request, 'mascots/detail.html', {'mascot': mascot, 'feeding_form': feeding_form, 'products': products_mascot_doesnt_endorse})
+
+
+def assoc_product(request, mascot_id, product_id ):
+  mascot = Mascot.objects.get(id=mascot_id)
+  mascot.products.add(product_id)
+  return redirect('detail', mascot_id=mascot_id)
 
 def add_feeding(request, mascot_id):
   form = FeedingForm(request.POST)
@@ -37,12 +39,30 @@ def add_feeding(request, mascot_id):
 
 class MascotCreate(CreateView):
     model = Mascot
-    fields = '__all__'
+    fields = ['name', 'company', 'description', 'age']
 
 class MascotUpdate(UpdateView):
   model = Mascot
-  fields = ['product', 'description', 'age']
+  fields = ['company', 'description', 'age']
 
 class MascotDelete(DeleteView):
   model = Mascot
   success_url = '/mascots/'
+
+class ProductList(ListView):
+  model = Product
+
+class ProductDetail(DetailView):
+  model = Product
+
+class ProductCreate(CreateView):
+  model = Product
+  fields = '__all__'
+
+class ProductUpdate(UpdateView):
+  model = Product
+  fields = ['name', 'color']
+
+class ProductDelete(DeleteView):
+  model = Product
+  success_url = '/products/'

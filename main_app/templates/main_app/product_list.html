@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Product List</h1>
+
+{% for product in product_list %}
+  <a href="{% url 'products_detail' product.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ product.name }}</span>
+            <p>Color: {{ product.color }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}
